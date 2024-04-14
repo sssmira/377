@@ -3,20 +3,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <head>
-    <title>About</title>
+    <title>User Profile</title>
     <script src="javascript.js" defer></script>
-    <script src="https://kit.fontawesome.com/4df4693a91.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <div id="header">
-        <h1>About Us</h1>
+        <h1>User Profile</h1>
     </div>
-
-    <a href="userprofile.html">
-        <i class="fa-regular fa-user" style='font-size:30px;color: black'></i>
-    </a>
 
     <nav>
         <ul>
@@ -27,9 +22,16 @@
         </ul>
     </nav>
 
-    <footer id="header">
-        <h2>All Rights Reserved.</h2>
-    </footer>
+    <h1>Welcome to Your Profile</h1>
+    <p>Here is your profile information:</p>
+    <p><a id="profileLink" href="#">View Your Profile</a></p>
+
+    <h2>Create an Account</h2>
+    <form id="createAccountForm">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <button type="submit">Create Account</button>
+    </form>
 </body>
 
 </html>

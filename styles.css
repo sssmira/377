@@ -5,44 +5,110 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-  }
-  
-  nav {
+}
+
+nav {
     text-align: center;
     background-color: #333;
     padding: 10px 0;
-  }
-  
-  nav ul {
+}
+
+nav ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
-  }
-  
-  nav ul li {
+}
+
+nav ul li {
     display: inline-block;
     margin: 0 15px;
-  }
+}
 
-  nav ul li:hover {
+nav ul li:hover {
     background-color: white;
-  }
-  
-  nav ul li a {
+}
+
+nav ul li a {
     text-decoration: none;
     color: #fff;
-  }
-  
-  nav ul li a.active {
+}
+
+nav ul li a.active {
     text-decoration: underline;
     color: white;
     background-color: aqua;
-  }
+}
 
 .fa-user {
     position: fixed;
     top: 20px;
     right: 20px;
-    z-index: 9999; /* Ensure it appears above other content */
-  }
-  
+    z-index: 9999;
+    /* Ensure it appears above other content */
+}
+
+.container {
+    width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #666;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 94%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.eye-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background-image: url('https://cdn-icons-png.freepik.com/256/3880/3880307.png');
+    /* Replace 'eye_icon.png' with the path to your eye icon image */
+    background-size: cover;
+    cursor: pointer;
+}
+
+/* Password container styles (to position the eye icon within the input field) */
+.password-container {
+    position: relative;
+}

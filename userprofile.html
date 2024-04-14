@@ -22,16 +22,40 @@
         </ul>
     </nav>
 
-    <h1>Welcome to Your Profile</h1>
-    <p>Here is your profile information:</p>
-    <p><a id="profileLink" href="#">View Your Profile</a></p>
+    <div class="container">
+        <h2>User Registration</h2>
+        <form onsubmit="validatePassword(event)">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Enter Username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder='Enter Email Address' required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <div class="password-container">
+                    <input type="password" id="password" name="password" placeholder='Minimum 8 characters' required>
+                    <span class="eye-icon" id="eyeIcon"></span> <!-- Eye icon -->
+                  </div>
+                </div>
+                <div id="passwordRequirements">
+                    <ul>
+                      <li id="lengthRequirement">At least 8 characters</li>
+                      <li id="uppercaseRequirement">At least one uppercase letter</li>
+                      <li id="lowercaseRequirement">At least one lowercase letter</li>
+                      <li id="numberRequirement">At least one number</li>
+                    </ul>
+                  </div>
+                  <div class="form-group">
+                    <button type="submit">Register</button>
+                </div>
+            </div>
 
-    <h2>Create an Account</h2>
-    <form id="createAccountForm">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <button type="submit">Create Account</button>
-    </form>
+        </form>
+    </div>
+
 </body>
 
 </html>

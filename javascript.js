@@ -1,3 +1,4 @@
+// Password Validation
 document.addEventListener('DOMContentLoaded', function() {
     const passwordInput = document.getElementById('password');
     const lengthRequirement = document.getElementById('lengthRequirement');

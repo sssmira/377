@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <head>
-    <title>Trending</title>
+    <title>Explore</title>
     <script src="javascript.js" defer></script>
     <script src="https://kit.fontawesome.com/4df4693a91.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles.css">
@@ -11,7 +11,7 @@
 
 <body>
     <div id="header">
-        <h1>Trending</h1>
+        <h1>Explore</h1>
     </div>
 
     <a href="userprofile.html">
@@ -21,13 +21,32 @@
     <nav>
         <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="trending.html">Trending</a></li>
+            <li><a href="trending.html">Explore</a></li>
             <li><a href="about.html">About Us</a></li>
             <li><a href="help.html">Help</a></li>
         </ul>
     </nav>
 
-    <footer id="header">
+    <div class="container">
+        <div class="left-section">
+            <div class="image-container">
+                <img src="your_image_url.jpg" alt="Book Cover">
+            </div>
+        </div>
+        <div class="right-section">
+            <div class="book-details">
+                <div class="book-title">Book Title</div>
+                <div class="description">Description of the book goes here.</div>
+                <div class="icon-container">
+                    <i class="fas fa-times icon" style="color:black"></i> <!-- X icon -->
+                    <i class="fas fa-heart icon" style="color:red"></i> <!-- Heart icon -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <footer id="footer">
         <h2>All Rights Reserved.</h2>
     </footer>
 </body>

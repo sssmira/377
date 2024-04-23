@@ -55,3 +55,21 @@ document.addEventListener('DOMContentLoaded', function() {
       passwordInput.setAttribute('type', type);
     });
   });
+
+/**
+ * return a dictionary containing book data; book_title, Author, Genre, Date, description
+ *
+ * @return {dictionary} dictionary containing singular book data
+ */
+async function getBook(){
+
+
+}
+
+/**
+ * helper function that clears a div 
+ *
+ */
+function clearDiv(){
+
+}

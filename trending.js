@@ -66,7 +66,9 @@ async function getDescription(isbn) {
  */
 async function getRandomBook() {
   randomSubject = getRandomSubject(readingSubjects);
-  console.log('Random Subject: '+randomSubject);
+  console.log('Random Subject: ' + randomSubject);
+  
+  let bookData = {}; // Object to store book data
 
   try {
     const response = await fetch(`https://openlibrary.org/subjects/${randomSubject}.json?details=false`);
@@ -77,35 +79,52 @@ async function getRandomBook() {
       throw new Error('Book availability is undefined');
     }
 
-    const book_olid = book_to_show.availability.openlibrary_work
+    const book_olid = book_to_show.availability.openlibrary_work;
     const book_isbn = book_to_show.availability.isbn;
     const book_title = book_to_show.title;
     const authorName = book_to_show.authors[0].name;
     const genre = book_to_show.subject[0];
 
+    let description = "";
     try {
       description = await getDescription(book_olid);
     } catch (error) {
-      console.error('Error getting book description 3:', error);
-      getRandomBook();
+      console.error('Error getting book description:', error);
+      throw new Error('Error getting book description');
     }
 
-    console.log('Book:' + book_to_show);
-    console.log('OLID: '+ book_olid)
-    console.log('ISBN: '+book_isbn);
-    console.log('title: '+ book_title);
-    console.log('description: '+description);
-    console.log('author: '+ authorName);
-    console.log('Genre: '+ genre);
+    // fetch book image
+    const book_cover = await getBookCover(book_isbn);
 
-    // Call function to fetch book image
-    // getBookCover();
+    // Populate book data object
+    bookData = {
+      book_to_show,
+      book_olid,
+      book_isbn,
+      book_title,
+      description,
+      authorName,
+      genre,
+      book_cover // Add book cover to the object
+    };
+
+    console.log('Book:', book_to_show);
+    console.log('OLID:', book_olid);
+    console.log('ISBN:', book_isbn);
+    console.log('Title:', book_title);
+    console.log('Description:', description);
+    console.log('Author:', authorName);
+    console.log('Genre:', genre);
+    console.log('Book Cover:', book_cover);
 
   } catch (error) {
     console.error('Error fetching random book:', error);
-    // Recall the getRandomBook function
-    getRandomBook();
+    
+    return getRandomBook();
   }
+
+  
+  return bookData;
 }
 
 
@@ -122,6 +141,7 @@ async function getBookCover(isbn){
     console.error('Error fetching book cover:', error);
     return null;
   }
+
 }
 
 function setBook(){

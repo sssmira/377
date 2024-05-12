@@ -32,6 +32,12 @@ function getRandomSubject(list_of_subjects){
   return list_of_subjects[randomIndex];
 }
 
+function getRandomObject(data){
+  const worksArray = data.works;
+  const randomIndex = Math.floor(Math.random() * worksArray.length);
+  return worksArray[randomIndex];
+}
+
 /**
  * return a dictionary containing book data; book_title, Author, Genre, Date, description
  *
@@ -45,20 +51,24 @@ async function getRandomBook() {
   try {
     const response = await fetch(`https://openlibrary.org/subjects/${randomSubject}.json?details=false`);
     const data = await response.json();
-    console.log(data)
+
+    book_to_show = getRandomObject(data)
+    book_isbn = book_to_show.isbn
+    book_title = book_to_show.title
+    authorName = book_to_show.authors[0].name;
+    genre = book_to_show.subject[0];
+
+    console.log(book_to_show)
+    console.log(book_title)
+    console.log(authorName)
+    console.log(genre)
 
     if (data.numFound === 0 || !data.docs || data.docs.length === 0) {
       console.error('No random book found. Try again!');
       return;
     }
 
-    const bookData = data.docs[Math.floor(Math.random() * data.docs.length)];
-    const title = bookData.title || 'Unknown Title';
-    const author = (bookData.author_name && bookData.author_name[0]) || 'Unknown Author';
     
-    document.getElementById('title').textContent = `Book Title: ${title}`;
-    document.getElementById('author').textContent = `Author: ${author}`;
-
     //getBookImg(); // Call function to fetch book image
 
   } catch (error) {
@@ -67,10 +77,24 @@ async function getRandomBook() {
 }
 
 
-async function getBookImg(){
-
+async function getBookCover(isbn){
+  const url = `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`; 
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('Failed to fetch book cover');
+    }
+    const imageUrl = response.url;
+    return imageUrl;
+  } catch (error) {
+    console.error('Error fetching book cover:', error);
+    return null;
+  }
 }
 
+function setBook(){
+
+}
 /**
  * helper function that clears a div 
  *

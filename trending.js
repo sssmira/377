@@ -38,41 +38,73 @@ function getRandomObject(data){
   return worksArray[randomIndex];
 }
 
+async function getDescription(isbn) {
+  try {
+    const response = await fetch(`https://openlibrary.org/books/${isbn}.json`);
+    const data = await response.json();
+
+    
+    
+    const bookDescription = data.description ? data.description.value: 'Not found';
+
+    if (bookDescription === 'Not found' || bookDescription == undefined) {
+      throw new Error("Description not found");
+    }
+
+    return bookDescription;
+  } catch (error) {
+    console.error('Error Getting book description 1:', error);
+    getRandomBook()
+    //return "Error getting description 2";
+  }
+}
+
 /**
  * return a dictionary containing book data; book_title, Author, Genre, Date, description
  *
  * @return {dictionary} dictionary containing singular book data
  */
 async function getRandomBook() {
-
-  randomSubject = getRandomSubject(readingSubjects)
-  console.log(randomSubject)
+  randomSubject = getRandomSubject(readingSubjects);
+  console.log('Random Subject: '+randomSubject);
 
   try {
     const response = await fetch(`https://openlibrary.org/subjects/${randomSubject}.json?details=false`);
     const data = await response.json();
 
-    book_to_show = getRandomObject(data)
-    book_isbn = book_to_show.isbn
-    book_title = book_to_show.title
-    authorName = book_to_show.authors[0].name;
-    genre = book_to_show.subject[0];
-
-    console.log(book_to_show)
-    console.log(book_title)
-    console.log(authorName)
-    console.log(genre)
-
-    if (data.numFound === 0 || !data.docs || data.docs.length === 0) {
-      console.error('No random book found. Try again!');
-      return;
+    book_to_show = getRandomObject(data);
+    if (!book_to_show.availability || book_to_show.availability.isbn === null) {
+      throw new Error('Book availability is undefined');
     }
 
-    
-    //getBookImg(); // Call function to fetch book image
+    const book_olid = book_to_show.availability.openlibrary_work
+    const book_isbn = book_to_show.availability.isbn;
+    const book_title = book_to_show.title;
+    const authorName = book_to_show.authors[0].name;
+    const genre = book_to_show.subject[0];
+
+    try {
+      description = await getDescription(book_olid);
+    } catch (error) {
+      console.error('Error getting book description 3:', error);
+      getRandomBook();
+    }
+
+    console.log('Book:' + book_to_show);
+    console.log('OLID: '+ book_olid)
+    console.log('ISBN: '+book_isbn);
+    console.log('title: '+ book_title);
+    console.log('description: '+description);
+    console.log('author: '+ authorName);
+    console.log('Genre: '+ genre);
+
+    // Call function to fetch book image
+    // getBookCover();
 
   } catch (error) {
     console.error('Error fetching random book:', error);
+    // Recall the getRandomBook function
+    getRandomBook();
   }
 }
 
@@ -95,6 +127,9 @@ async function getBookCover(isbn){
 function setBook(){
 
 }
+
+
+
 /**
  * helper function that clears a div 
  *

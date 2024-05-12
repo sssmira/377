@@ -57,24 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-/**
- * return a dictionary containing book data; book_title, Author, Genre, Date, description
- *
- * @return {dictionary} dictionary containing singular book data
- */
-async function getBook() {
-
-
-}
-
-/**
- * helper function that clears a div 
- *
- */
-function clearDiv() {
-
-}
-
 /* THE FOLLOWING IS THE JS NEEDED FOR THE HELP.HTML PAGE */
 
 const apiUrl = 'https://openlibrary.org/search.json?';

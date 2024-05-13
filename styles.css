@@ -1,3 +1,27 @@
+/*Text font from Google*/
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+
+/*I'm [Samira] adding some color variables here*/
+:root {
+    --primary-color: #0d62e9;
+    --primary-color-dark: #22796e;
+    --secondary-color: #ef774c;
+    --text-dark: #2a2635;
+    --text-light: #6b7280;
+    --bg-color: #f9ece3;
+    --max-width: 1200px;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  
+a {
+    text-decoration: none;
+}
+
 #header {
     text-align: center;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;

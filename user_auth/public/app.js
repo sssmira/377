@@ -1,81 +1,70 @@
-// See masked Password Input
-const eyeIcon = document.getElementById('eyeIcon');
-eyeIcon.addEventListener('click', function () {
-    const passwordInput = document.getElementById('password');
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-});
-
 document.addEventListener('DOMContentLoaded', function () {
-    // Password Validation code...
-    const passwordInput = document.getElementById('password');
+    // See masked Password Input
+    const eyeIcon = document.getElementById('eyeIcon');
+    if (eyeIcon) {
+        eyeIcon.addEventListener('click', function () {
+            const passwordInput = document.getElementById('userPass');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+        });
+    }
+
+    // Password Validation code
+    const passwordInput = document.getElementById('userPass');
     const lengthRequirement = document.getElementById('lengthRequirement');
     const uppercaseRequirement = document.getElementById('uppercaseRequirement');
     const lowercaseRequirement = document.getElementById('lowercaseRequirement');
     const numberRequirement = document.getElementById('numberRequirement');
 
-    passwordInput.addEventListener('input', function () {
-        const password = passwordInput.value;
+    if (passwordInput) {
+        passwordInput.addEventListener('input', function () {
+            const password = passwordInput.value;
 
-        // Check length requirement
-        if (password.length >= 6) {
-            lengthRequirement.style.color = 'green';
-        } else {
-            lengthRequirement.style.color = 'red';
-        }
+            // Check length requirement
+            lengthRequirement.style.color = password.length >= 6 ? 'green' : 'red';
 
-        // Check uppercase requirement
-        if (/[A-Z]/.test(password)) {
-            uppercaseRequirement.style.color = 'green';
-        } else {
-            uppercaseRequirement.style.color = 'red';
-        }
+            // Check uppercase requirement
+            uppercaseRequirement.style.color = /[A-Z]/.test(password) ? 'green' : 'red';
 
-        // Check lowercase requirement
-        if (/[a-z]/.test(password)) {
-            lowercaseRequirement.style.color = 'green';
-        } else {
-            lowercaseRequirement.style.color = 'red';
-        }
+            // Check lowercase requirement
+            lowercaseRequirement.style.color = /[a-z]/.test(password) ? 'green' : 'red';
 
-        // Check number requirement
-        if (/\d/.test(password)) {
-            numberRequirement.style.color = 'green';
-        } else {
-            numberRequirement.style.color = 'red';
-        }
-    });
+            // Check number requirement
+            numberRequirement.style.color = /\d/.test(password) ? 'green' : 'red';
+        });
+    }
 
     // Form submission event listener
     const signupForm = document.getElementById('signupForm');
-    signupForm.addEventListener('submit', async function (event) {
-        event.preventDefault(); // Prevent default form submission
+    if (signupForm) {
+        signupForm.addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent default form submission
 
-        const email = document.getElementById('email').value; //Get email value
-        const password = document.getElementById('password').value; // Get password value
-        const username = document.getElementById('username').value; // Get username value
-        const fullName = document.getElementById('full_name').value; // Get full name value
+            const email = document.getElementById('userEmail').value; // Get email value
+            const user_pass = document.getElementById('userPass').value; // Get password value
+            const username = document.getElementById('userName').value; // Get username value
+            const full_name = document.getElementById('fullName').value; // Get full name value
 
-        try {
-            // Send signup request to backend
-            const response = await fetch('/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email, password, username, full_name: fullName })
-            });
+            try {
+                // Send signup request to backend
+                const response = await fetch('/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, user_pass, username, full_name }) // Match field names
+                });
 
-            if (!response.ok) {
-                throw new Error('Failed to sign up user');
+                if (!response.ok) {
+                    throw new Error('Failed to sign up user');
+                }
+
+                const data = await response.json();
+                alert(data.message); // Display success message
+            } catch (error) {
+                console.error('Error signing up user:', error.message);
+                alert('An error occurred while signing up user');
             }
-
-            const data = await response.json();
-            alert(data.message); // Display success message
-            // Redirect user or perform other actions...
-        } catch (error) {
-            console.error('Error signing up user:', error.message);
-            alert('An error occurred while signing up user');
-        }
-    });
+        });
+    }
 });

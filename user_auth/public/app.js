@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const email = document.getElementById('userEmail').value; // Get email value
             const user_pass = document.getElementById('userPass').value; // Get password value
-            const username = document.getElementById('userName').value; // Get username value
+            const userName = document.getElementById('userName').value; // Get username value
             const full_name = document.getElementById('fullName').value; // Get full name value
 
             try {
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ email, user_pass, username, full_name }) // Match field names
+                    body: JSON.stringify({ userEmail: email, userPass: user_pass, userName: userName, fullName: full_name })
                 });
 
                 if (!response.ok) {
@@ -61,6 +61,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const data = await response.json();
                 alert(data.message); // Display success message
+
+                // Store the JWT token in local storage or cookies
+                if (data.token) {
+                    localStorage.setItem('token', data.token);
+                }
             } catch (error) {
                 console.error('Error signing up user:', error.message);
                 alert('An error occurred while signing up user');

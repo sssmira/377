@@ -2,19 +2,20 @@ require('dotenv').config();
 const { createClient } = require('@supabase/supabase-js');
 const bodyParser = require('body-parser');
 const express = require('express');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const port = 3000;
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 
-// Supabase URL (hardcoded) and Key (loaded from environment variable)
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
+const jwtSecret = process.env.JWT_SECRET;
 
-if (!supabaseKey) {
-    console.error("Supabase Key is missing. Please check your .env file.");
-    process.exit(1); // Exit the application with a failure status
+if (!supabaseKey || !jwtSecret) {
+    console.error("Supabase Key or JWT Secret is missing. Please check your .env file.");
+    process.exit(1);
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -27,13 +28,12 @@ app.get('/', (req, res) => {
 // Route to handle user sign-up
 app.post('/signup', async (req, res) => {
     console.log('Received signup request with body:', req.body);
-    const { userName, fullName, userEmail, userPass } = req.body;
+    const { userEmail, userPass, userName, fullName } = req.body;
 
     try {
-        // Sign up the user with Supabase authentication
         const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-            email: userEmail,
-            password: userPass
+            email: 'zeeshawn.ahmad@gmail.com',
+            password: 'Test24'
         });
 
         if (signUpError) {
@@ -43,7 +43,6 @@ app.post('/signup', async (req, res) => {
 
         console.log('Signup successful:', signUpData);
 
-        // Insert user profile into profiles table
         const { user } = signUpData;
         const { data: insertData, error: insertError } = await supabase
             .from('profiles')
@@ -55,32 +54,37 @@ app.post('/signup', async (req, res) => {
         }
 
         console.log('User profile inserted successfully:', insertData);
-        return res.status(200).json({ message: 'User signed up successfully' });
+
+        // Generate JWT
+        const token = jwt.sign({ userId: user.id }, jwtSecret, { expiresIn: '1h' });
+
+        return res.status(200).json({ message: 'User signed up successfully', token });
     } catch (error) {
         console.error('Unexpected error signing up user:', error.message);
         return res.status(500).json({ error: `Failed to sign up user: ${error.message}` });
     }
 });
 
-// Route to retrieve all user profiles
-app.get('/profiles', async (req, res) => {
-    console.log('Getting all user profiles');
+// Middleware to verify JWT
+const verifyToken = (req, res, next) => {
+    const token = req.headers['authorization']?.split(' ')[1];
+    if (!token) {
+        return res.status(401).json({ error: 'Unauthorized access' });
+    }
 
-    try {
-        const { data, error } = await supabase
-            .from('profiles')
-            .select();
-
-        if (error) {
-            console.error('Error retrieving user profiles:', error.message);
-            return res.status(500).json({ error: 'Failed to retrieve user profiles' });
+    jwt.verify(token, jwtSecret, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({ error: 'Unauthorized access' });
         }
 
-        return res.status(200).json(data);
-    } catch (error) {
-        console.error('Unexpected error retrieving user profiles:', error.message);
-        return res.status(500).json({ error: 'Failed to retrieve user profiles' });
-    }
+        req.userId = decoded.userId;
+        next();
+    });
+};
+
+// Protected route example
+app.get('/protected', verifyToken, (req, res) => {
+    res.json({ message: `Hello user with ID: ${req.userId}` });
 });
 
 // Start the Express server

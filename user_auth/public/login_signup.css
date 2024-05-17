@@ -6,7 +6,7 @@ I put this in a seperate file so that I could debug*/
 
 :root {
   --primary-color: #0d62e9;
-  --primary-color-dark: #ef774c;
+  --primary-color-dark: #FF4742;
   --secondary-color: #22796e;
   --text-dark: #2a2635;
   --text-light: #6b7280;
@@ -22,18 +22,25 @@ a {
   text-decoration: none;
 }
 
+a:hover{
+  color: var(--primary-color-dark);
+}
+
 body {
   font-family: "Poppins", sans-serif;
+  background-color: var(--bg-color);
 }
 /* Password container styles (to position the eye icon within the input field) */
 .password-container {
   position: relative;
 }
 
+/*
 .user-registration-page a:link,
 .user-registration-page a:visited {
-    color: rgb(40, 40, 194); /* Set the default color for links */
+    color: rgb(40, 40, 194); 
 }
+*/
 
 input[type="text"],
 input[type="email"],
@@ -118,3 +125,4 @@ label {
 .button-24:active {
   opacity: .5;
 }
+

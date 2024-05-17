@@ -65,66 +65,44 @@ async function getDescription(isbn) {
  * @return {dictionary} dictionary containing singular book data
  */
 async function getRandomBook() {
-  randomSubject = getRandomSubject(readingSubjects);
-  console.log('Random Subject: ' + randomSubject);
-  
-  let bookData = {}; // Object to store book data
+  const randomSubject = getRandomSubject(readingSubjects);
+  console.log('Random Subject:', randomSubject);
 
   try {
     const response = await fetch(`https://openlibrary.org/subjects/${randomSubject}.json?details=false`);
     const data = await response.json();
 
-    book_to_show = getRandomObject(data);
-    if (!book_to_show.availability || book_to_show.availability.isbn === null) {
-      throw new Error('Book availability is undefined');
+    const bookToShow = getRandomObject(data);
+    const { title, authors, subject } = bookToShow;
+
+    if (!bookToShow.availability || !bookToShow.availability.isbn) {
+      throw new Error('Book availability is undefined or ISBN is missing');
     }
 
-    const book_olid = book_to_show.availability.openlibrary_work;
-    const book_isbn = book_to_show.availability.isbn;
-    const book_title = book_to_show.title;
-    const authorName = book_to_show.authors[0].name;
-    const genre = book_to_show.subject[0];
+    const bookOlid = bookToShow.availability.openlibrary_work;
+    const bookIsbn = bookToShow.availability.isbn;
+    const authorName = authors[0].name;
+    const genre = subject[0];
 
-    let description = "";
-    try {
-      description = await getDescription(book_olid);
-    } catch (error) {
-      console.error('Error getting book description:', error);
-      throw new Error('Error getting book description');
-    }
+    const description = await getDescription(bookOlid);
+    const bookCover = await getBookCover(bookIsbn);
 
-    // fetch book image
-    const book_cover = await getBookCover(book_isbn);
-
-    // Populate book data object
-    bookData = {
-      book_to_show,
-      book_olid,
-      book_isbn,
-      book_title,
-      description,
+    const bookData = {
+      title,
       authorName,
       genre,
-      book_cover // Add book cover to the object
+      description,
+      bookCover,
+      bookOlid,
+      bookIsbn
     };
 
-    console.log('Book:', book_to_show);
-    console.log('OLID:', book_olid);
-    console.log('ISBN:', book_isbn);
-    console.log('Title:', book_title);
-    console.log('Description:', description);
-    console.log('Author:', authorName);
-    console.log('Genre:', genre);
-    console.log('Book Cover:', book_cover);
-
+    console.log('Book Data:', bookData);
+    return bookData;
   } catch (error) {
     console.error('Error fetching random book:', error);
-    
-    return getRandomBook();
+    return getRandomBook(); // Retry fetching a random book
   }
-
-  
-  return bookData;
 }
 
 
@@ -144,8 +122,25 @@ async function getBookCover(isbn){
 
 }
 
-function setBook(){
+function setBook(bookData) {
+  if (!bookData) {
+    console.error('No book data provided');
+    return;
+  }
 
+  console.log('Book Data:', JSON.stringify(bookData, null, 2));
+
+  document.getElementById('title').textContent = `Book Title: ${bookData.title}`;
+  document.getElementById('author').textContent = `Book Author: ${bookData.authorName}`;
+  document.getElementById('genre').textContent = `Book Genre: ${bookData.genre}`;
+  // Assuming date is not available in the provided data, hence commented
+  // document.getElementById('date').textContent = `Date Published: ${bookData.date}`;
+  document.getElementById('description').textContent = `Description: ${bookData.description}`;
+  if (bookData.bookCover) {
+    document.getElementById('book-cover').src = bookData.bookCover;
+  } else {
+    document.getElementById('book-cover').alt = 'No cover available';
+  }
 }
 
 
@@ -158,4 +153,10 @@ function clearDiv(divId) {
   document.getElementById(divId).textContent = '';
 }
 
-getRandomBook()
+async function displayRandomBook() {
+  const bookData = await getRandomBook();
+  setBook(bookData);
+}
+
+// Call displayRandomBook to fetch and display a random book
+displayRandomBook();

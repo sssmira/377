@@ -1,15 +1,23 @@
-const supabaseClient = require('@supabase/supabase-js')
-const bodyParser = require('body-parser')
-const express = require('express')
+require('dotenv').config();
+const { createClient } = require('@supabase/supabase-js');
+const bodyParser = require('body-parser');
+const express = require('express');
 
-const app = express()
-const port = 3000
-app.use(bodyParser.json())
-app.use(express.static(__dirname + '/public'))
+const app = express();
+const port = 3000;
+app.use(bodyParser.json());
+app.use(express.static(__dirname + '/public'));
 
-const supabaseUrl = 'https://ybexbycrpokdmgdpibeg.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InliZXhieWNycG9rZG1nZHBpYmVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTU3NDM3ODUsImV4cCI6MjAzMTMxOTc4NX0.IXDHlD493Fcdj1N8yxfbQTvr5J64Vz1nwCdFywt6AIY'
-const supabase = supabaseClient.createClient(supabaseUrl, supabaseKey)
+// Supabase URL (hardcoded) and Key (loaded from environment variable)
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+
+if (!supabaseKey) {
+    console.error("Supabase Key is missing. Please check your .env file.");
+    process.exit(1); // Exit the application with a failure status
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Route to serve the signup page
 app.get('/', (req, res) => {
@@ -18,36 +26,39 @@ app.get('/', (req, res) => {
 
 // Route to handle user sign-up
 app.post('/signup', async (req, res) => {
-    console.log('Signing up a new user');
-    const { username, full_name, email, user_pass } = req.body;
+    console.log('Received signup request with body:', req.body);
+    const { userName, fullName, userEmail, userPass } = req.body;
 
     try {
         // Sign up the user with Supabase authentication
         const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-            email,
-            password: user_pass
+            email: userEmail,
+            password: userPass
         });
 
         if (signUpError) {
             console.error('Error signing up user:', signUpError.message);
-            return res.status(500).json({ error: 'Failed to sign up user' });
+            return res.status(500).json({ error: `Failed to sign up user: ${signUpError.message}` });
         }
 
+        console.log('Signup successful:', signUpData);
+
         // Insert user profile into profiles table
+        const { user } = signUpData;
         const { data: insertData, error: insertError } = await supabase
             .from('profiles')
-            .insert([{ username, full_name, email, user_pass }]);
+            .insert([{ username: userName, full_name: fullName, email: userEmail }]);
 
         if (insertError) {
             console.error('Error inserting user profile:', insertError.message);
-            return res.status(500).json({ error: 'Failed to insert user profile' });
+            return res.status(500).json({ error: `Failed to insert user profile: ${insertError.message}` });
         }
 
-        console.log('User signed up successfully:', signUpData.user);
+        console.log('User profile inserted successfully:', insertData);
         return res.status(200).json({ message: 'User signed up successfully' });
     } catch (error) {
-        console.error('Error signing up user:', error.message);
-        return res.status(500).json({ error: 'Failed to sign up user' });
+        console.error('Unexpected error signing up user:', error.message);
+        return res.status(500).json({ error: `Failed to sign up user: ${error.message}` });
     }
 });
 
@@ -61,13 +72,13 @@ app.get('/profiles', async (req, res) => {
             .select();
 
         if (error) {
-            console.error('Error:', error);
+            console.error('Error retrieving user profiles:', error.message);
             return res.status(500).json({ error: 'Failed to retrieve user profiles' });
         }
 
         return res.status(200).json(data);
     } catch (error) {
-        console.error('Error retrieving user profiles:', error.message);
+        console.error('Unexpected error retrieving user profiles:', error.message);
         return res.status(500).json({ error: 'Failed to retrieve user profiles' });
     }
 });

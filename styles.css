@@ -39,7 +39,9 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
 }
-
+nav {
+    margin-bottom: 10px; 
+}
 nav ul {
     list-style: none;
     background: #476ab5;
@@ -147,7 +149,6 @@ button:hover {
     width: 20px;
     height: 20px;
     background-image: url('https://cdn-icons-png.freepik.com/256/3880/3880307.png');
-    /* Replace 'eye_icon.png' with the path to your eye icon image */
     background-size: cover;
     cursor: pointer;
 }
@@ -158,14 +159,14 @@ button:hover {
 }
 
 .container {
-    margin: 10px auto; /* Center horizontally */
+    margin: 10px auto;
     padding: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 680px;
-    max-width: 1200px; /* Adjust max-width as needed */
-    position: relative; /* Add relative positioning */
+    max-width: 1200px; 
+    position: relative; 
 }
 .left-section {
     flex: 1;
@@ -195,31 +196,31 @@ button:hover {
 
 .icon-container {
     
-    bottom: 20px; /* Adjust as needed */
-    left: 0; /* Align icons to the left */
+    bottom: 20px; 
+    left: 0; 
 }
 .icon {
-    margin-right: 200px; /* Add margin between icons */
+    margin-right: 200px; 
     font-size: 24px;
     cursor: pointer;
 }
 
 .book-container {
-    margin: 10px auto; /* Center horizontally */
+    margin: 10px auto; 
     padding: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 680px;
-    max-width: 1200px; /* Adjust max-width as needed */
-    position: relative; /* Add relative positioning */
+    max-width: 1200px; 
+    position: relative; 
 }
 
 .book {
     display: flex;
-    width: 100%; /* Adjust width as needed */
-    max-width: 900px; /* Adjust max-width as needed */
-    height: 630px; /* Adjust height as needed */
+    width: 100%; 
+    max-width: 900px; 
+    height: 630px; 
     background-color: #fff;
     border: 1px solid #ccc;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -228,11 +229,11 @@ button:hover {
 }
 
 .page {
-    width: 100%; /* Adjust width */
-    height: auto; /* Adjust height */
+    width: 100%; 
+    height: auto; 
     overflow: hidden;
     position: relative;
-    margin: 20px; /* Add margin to create space around the page */
+    margin: 20px; 
 }
 
 .left-page {
@@ -284,19 +285,28 @@ button:hover {
 .user-registration-page a:visited {
     color: blue; 
 }
-.container {
-    display: flex;
-    justify-content: space-between;
-    max-width: 100%;
-    margin: auto;
-    height: calc(100vh - 120px); 
-    padding: 0;
+body.help-background {
+    position: relative; 
+    background-color: #f9ece3; 
 }
 
+body.help-background::before {
+    content: ""; 
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('https://www.southernliving.com/thmb/wsTKCknvqDW-B5ASPyZLv4zufQ8=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/gettyimages-183822187-1-709a5ded972a426a9e214eba1f81c8a4.jpg') no-repeat center center;
+    background-size: cover; 
+    opacity: 0.5; 
+    z-index: -1; 
+}
 .left-section {
     flex: 0 0 80%; 
     display: flex;
     flex-direction: column;
+    margin-top: 15px;
 }
 
 .right-section {
@@ -304,24 +314,24 @@ button:hover {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    height: 98%; 
+    height: 100%; 
 }
 
 .section {
     padding: 20px;
     margin-bottom: 10px;
-    background-color: #f0f0f0;
+    background-color: #78b1cd;
     transition: background-color 0.3s ease;
 }
 
 .section:hover {
-    background-color: #e0e0e0;
+    background-color: #47a2cf;
 }
 
 .contact-us {
-    width: 100%;
+    width: 100%; 
     padding: 10px 20px; 
-    background-color: #d0d0d0; 
+    background-color: #78b1cd; 
     box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
     text-align: center; 
     margin-top: 20px;
@@ -329,6 +339,7 @@ button:hover {
 .citation-indent {
     text-indent: 5%;
 }
-.how-to-heading {
+.how-to {
     text-align: center;
 }
+
